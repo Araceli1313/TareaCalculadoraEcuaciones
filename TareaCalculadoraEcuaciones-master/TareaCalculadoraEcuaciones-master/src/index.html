@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Calculadora de Ecuaciones Diferenciales</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#19a1e6",
+            "background-light": "#f6f7f8",
+            "background-dark": "#111c21",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-700 px-10 py-3">
+<div class="flex items-center gap-4 text-gray-900 dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_535)">
+<path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+<defs>
+<clippath id="clip0_6_535">
+<rect fill="white" height="48" width="48"></rect>
+</clippath>
+</defs>
+</svg>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+</div>
+</header>
+<main class="flex flex-col gap-8 p-10">
+<div class="flex flex-wrap justify-between gap-3">
+<div class="flex flex-col gap-2">
+<p class="text-4xl font-black tracking-tighter text-gray-900 dark:text-white">Calculadora de Ecuaciones Diferenciales</p>
+<p class="text-base font-normal text-gray-600 dark:text-gray-400">Resuelve ecuaciones diferenciales ordinarias con pasos.</p>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<label class="flex flex-col w-full">
+  <p class="text-base font-medium pb-2 text-gray-800 dark:text-gray-200">Ecuación</p>
+  <textarea id="equationInput" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-background-dark min-h-36 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal" placeholder="Ej: y' = 2*x + y"></textarea>
+</label>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+  <label class="flex flex-col">
+    <span class="text-sm text-gray-600 dark:text-gray-400">x₀</span>
+    <input id="x0Input" class="form-input rounded-md border px-2 py-1" type="number" value="0" step="any" />
+  </label>
+  <label class="flex flex-col">
+    <span class="text-sm text-gray-600 dark:text-gray-400">y₀</span>
+    <input id="y0Input" class="form-input rounded-md border px-2 py-1" type="number" value="1" step="any" />
+  </label>
+  <label class="flex flex-col">
+    <span class="text-sm text-gray-600 dark:text-gray-400">x final</span>
+    <input id="xEndInput" class="form-input rounded-md border px-2 py-1" type="number" value="5" step="any" />
+  </label>
+  <label class="flex flex-col">
+    <span class="text-sm text-gray-600 dark:text-gray-400">h (paso)</span>
+    <input id="hInput" class="form-input rounded-md border px-2 py-1" type="number" value="0.01" step="any" />
+  </label>
+</div>
+
+<div class="flex items-center gap-3">
+  <label class="text-sm text-gray-600 dark:text-gray-400">Método:</label>
+  <select id="methodSelect" class="form-input rounded-md border px-2 py-1">
+    <option value="linear">Ecuación diferencial lineal de primer orden</option>
+    <option value="homogeneous">Ecuaciones reducibles a lineales (homogéneas)</option>
+    <option value="bernoulli">Ecuación de Bernoulli</option>
+    <option value="riccati">Ecuación de Riccati</option>
+  </select>
+</div>
+
+<div class="flex justify-between gap-2 items-center">
+  <div class="flex gap-2">
+    <button aria-label="Función" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700">
+      <span class="material-symbols-outlined">function</span>
+    </button>
+    <button aria-label="Infinito" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700">
+      <span class="material-symbols-outlined">all_inclusive</span>
+    </button>
+    <button aria-label="Pi" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700">
+      <span class="material-symbols-outlined">pie_chart</span>
+    </button>
+    <button aria-label="División" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700">
+      <span class="material-symbols-outlined">horizontal_split</span>
+    </button>
+  </div>
+  <div class="flex px-4 py-3 justify-center">
+    <button id="calculateBtn" type="button" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 flex-1 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-wide hover:bg-primary/90 transition-colors">
+      <span class="material-symbols-outlined">calculate</span>
+      <span class="truncate">Calcular</span>
+    </button>
+  </div>
+</div>
+</div>
+<div class="border-t border-gray-200 dark:border-gray-700 my-4"></div>
+<div class="flex flex-col gap-6">
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white">Resultados</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="flex flex-col gap-4 p-6 bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+<div class="flex justify-between items-center">
+<h4 class="text-lg font-semibold">Solución</h4>
+<button aria-label="Copiar Solución" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-base">content_copy</span>
+</button>
+</div>
+<div class="p-4 bg-background-light dark:bg-background-dark rounded-lg">
+  <p id="solutionText" class="font-mono text-base text-gray-800 dark:text-gray-200">Aquí se mostrará la solución (numérica) — presiona Calcular.</p>
+  <div id="errorText" class="text-sm text-red-600 dark:text-red-400 mt-2"></div>
+</div>
+</div>
+<div class="flex flex-col gap-4 p-6 bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+  <div class="flex justify-between items-center">
+    <h4 class="text-lg font-semibold">Gráfica de la Solución</h4>
+    <button id="downloadChart" aria-label="Descargar Gráfica" class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700">
+      <span class="material-symbols-outlined text-base">download</span>
+    </button>
+  </div>
+  <div class="aspect-video bg-background-light dark:bg-background-dark rounded-lg flex items-center justify-center p-4">
+    <canvas id="solutionChart" class="w-full h-full"></canvas>
+  </div>
+</div>
+</div>
+</div>
+</main>
+<footer class="text-center p-6 mt-8 border-t border-gray-200 dark:border-gray-700">
+<p class="text-sm text-gray-500 dark:text-gray-400">© 2024 Calculadora de Ecuaciones Diferenciales. Todos los derechos reservados.</p>
+</footer>
+</div>
+</div>
+</div>
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@11.8.0/lib/browser/math.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="/app.js"></script>
+</body></html>
